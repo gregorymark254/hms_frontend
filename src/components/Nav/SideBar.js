@@ -60,9 +60,6 @@ const SideBar = () => {
                         <li className='relative'>
                           <Link to='/app/appointments' className='flex items-center text-xs py-4 pl-12 pr-6 h-6 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>Appointment</Link>
                         </li>
-                        <li className='relative'>
-                          <Link to='/app/createsupplier' className='flex items-center text-xs py-4 pl-12 pr-6 h-6 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>Add Supplier</Link>
-                        </li>
                       </ul>
                     </li>
                   )}

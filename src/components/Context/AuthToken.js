@@ -21,7 +21,7 @@ export default function AuthToken () {
 
   const [accessToken, setAccessToken] = useState(getToken());
 
-  const saveToken = (userToken, expirationHours = 5) => {
+  const saveToken = (userToken, expirationHours = 3) => {
     const expiresAt = new Date().getTime() + expirationHours * 60 * 60 * 1000;
     const tokenData = { data: userToken.data, expiresAt };
 
@@ -39,12 +39,12 @@ export default function AuthToken () {
       if (!token) {
         clearInterval(checkTokenInterval); // Stop checking once token is expired
         swal('Session has expired!', 'Please log in again.', 'info');
-        // window.location.href = '/';
-        // window.location.reload();
+        window.location.href = '/';
+        window.location.reload();
       }
     }, 1 * 60 * 60 * 1000); // Check every 1 hour
 
-    return () => clearInterval(checkTokenInterval); // Clean up interval on component unmount
+    return () => clearInterval(checkTokenInterval);
   }, []);
 
   return {
