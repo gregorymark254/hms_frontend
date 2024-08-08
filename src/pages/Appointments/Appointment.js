@@ -48,7 +48,7 @@ const Appointment = () => {
 
   return (
     <div className='mx-auto p-4'>
-      <div className='bg-white rounded-lg p-4 lg:w-[78vw] xl:w-[81vw] 2xl:w-full'>
+      <div className='bg-white rounded-lg p-4'>
         <div className='flex flex-wrap items-center justify-between py-3'>
           <h5 className='text-[#007CFF]'>Showing {appointment.length} out of {total} appointment</h5>
           <div className='py-2'>

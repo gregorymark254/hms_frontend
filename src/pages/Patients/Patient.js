@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { MdOutlineBlock, MdEdit, MdRemoveRedEye, } from 'react-icons/md';
 import Loader from '../Loader';
 import Pagination from '../Pagination';
-import { toast } from 'sonner'
 
 const Patient = () => {
 
@@ -46,21 +45,6 @@ const Patient = () => {
     return () => clearTimeout(timerId);
   }, [currentPage, recordsPerPage, searchPatient, getPatients]);
 
-
-  // delete a User
-  const deleteUser = async (id) => {
-    const confirmed = window.confirm('Are you sure you want to delete this User?');
-    if (confirmed) {
-      try {
-        await axios.delete(`/api/deleteuser/${id}`);
-        toast.success('User Deleted');
-        getPatients((currentPage - 1) * recordsPerPage, recordsPerPage, searchPatient);
-      } catch (error) {
-        toast.error('Delete failed');
-        console.log(error);
-      }
-    }
-  };
 
   return (
     <div className='mx-auto p-4'>

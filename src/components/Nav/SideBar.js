@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MdOutlineCancel, MdSpaceDashboard, MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { FaUsers, FaShoppingCart,FaMoneyCheck,FaUserMinus,FaCartPlus } from 'react-icons/fa';
+import { FaUsers,FaMoneyCheck,FaUserMinus,FaCartPlus } from 'react-icons/fa';
 import { useStateContext } from '../Context/ContextProvider';
 import 'tw-elements';
 

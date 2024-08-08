@@ -1,23 +1,12 @@
 import React, { useState, useEffect, useCallback} from 'react'
 import axios from '../../api/api'
-import { useParams, Link } from 'react-router-dom';
-import { MdOutlineBlock, MdEdit, } from 'react-icons/md';
+import { useParams } from 'react-router-dom';
+import { MdOutlineBlock } from 'react-icons/md';
 import Loader from '../Loader';
 import Pagination from '../Pagination';
 
-const Loading = () => (
-  <div className="animate-pulse rounded-md p-2">
-    <div className="h-3 mb-2 bg-gray-300 rounded"></div>
-    <div className="h-3 mb-2 bg-gray-300 rounded"></div>
-    <div className="h-3 mb-2 bg-gray-300 rounded"></div>
-    <div className="h-3 mb-2 bg-gray-300 rounded"></div>
-    <div className="h-3 bg-gray-300 rounded"></div>
-  </div>
-);
+const ViewDocAppointments = () => {
 
-const ViewPatient = () => {
-
-  const [viewPatient,setViewPatient] = useState([])
   const [appointments, setAppointments] = useState('')
   const [recordsPerPage, setRecordsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,26 +16,11 @@ const ViewPatient = () => {
   const [error, setError] = useState(null)
   const { id } = useParams();
 
-  // getting patient by id
-  const getPatientById = useCallback(async () => {
-    try {
-      const response = await axios.get(`/patients/${id}`);
-      setViewPatient(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setLoading(false)
-    }
-  }, [id]);
 
-  useEffect(() => {
-    getPatientById();
-  }, [getPatientById]);
-
-  // Fetch All appointment by patient id
+  // Fetch All appointment by doctor id
   const getAppointmentsById = useCallback(async (offset, limit) => {
     try {
-      const response = await axios.get(`/appointments/?patientId=${id}&offset=${offset}&limit=${limit}`);
+      const response = await axios.get(`/appointments/?doctorId=${id}&offset=${offset}&limit=${limit}`);
       setAppointments(response.data.items);
       setTotal(response.data.total);
       setLoading(false);
@@ -75,34 +49,10 @@ const ViewPatient = () => {
   return (
     <div>
       <div className="mx-auto p-4">
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
-            <div className='bg-white p-4 rounded-lg'>
-              <h2 className="text-lg font-bold mb-2 text-[#007CFF] underline">Patient Information</h2>
-              <h6>First Name : {viewPatient.firstName}</h6>
-              <h6>Last Name : {viewPatient.lastName}</h6>
-              <h6>Email : {viewPatient.email}</h6>
-              <h6>Date of Birth : {viewPatient.dateOfBirth}</h6>
-              <h6>Gender : {viewPatient.gender}</h6>
-            </div>
-            <div className='bg-white p-4 rounded-lg'>
-              <h2 className="text-lg font-bold mb-2 text-[#007CFF] underline">Contact Information</h2>
-              <h6>Address : {viewPatient.address}</h6>
-              <h6>Phone Number : {viewPatient.phoneNumber}</h6>
-              <h6>Emergency Number : {viewPatient.emergencyNumber}</h6>
-              <h6>Insurance Number : {viewPatient.insuranceNumber}</h6>
-              <h6>Insurance Name : {viewPatient.insuranceName}</h6>
-            </div>
-          </div>
-        )}
-
         <section className='my-4'>
-          <h3 className='text-[#007CFF]'><u>Appointments</u></h3>
-          <div className='bg-white rounded-lg p-4 lg:w-[78vw] xl:w-[81vw] 2xl:w-full'>
+          <h3 className='text-[#007CFF]'><u>Doc Appointments</u></h3>
+          <div className='bg-white rounded-lg p-4'>
             <div className='flex flex-wrap items-center justify-between py-3'>
-              <Link to='/app/addappointment' className='bg-[#007CFF] hover:bg-[#7c86f9] text-white px-5 py-2 rounded-lg'>Add Appointment</Link>
               <h5 className='text-[#007CFF]'>Showing {appointments.length} out of {total} appointment</h5>
               <div className='py-2'>
                 <form>
@@ -122,13 +72,13 @@ const ViewPatient = () => {
             </div>
             {loading
               ? (
-                <div className='flex items-center justify-center bg-[#f1f4f6] h-[50vh]'>
+                <div className='flex items-center justify-center bg-[#f1f4f6] h-[70vh]'>
                   <Loader />
                 </div>
                 )
               : error
                 ? (
-                  <div className='bg-[#f1f4f6] grid place-items-center h-[50vh]'>
+                  <div className='bg-[#f1f4f6] grid place-items-center h-[70vh]'>
                     <div className='grid place-items-center'>
                       <h2><MdOutlineBlock /></h2>
                       <h4>Error occurred while fetching data</h4>
@@ -136,7 +86,7 @@ const ViewPatient = () => {
                   </div>
                   )
                 : (
-                  <div className='overflow-x-auto h-[50vh]'>
+                  <div className='overflow-x-auto h-[70vh]'>
                     {appointments.length > 0
                       ? (
                         <table className='w-full text-left table-auto'>
@@ -149,7 +99,6 @@ const ViewPatient = () => {
                               <th className='p-2'>Patient Name</th>
                               <th className='p-2'>Doctors Name</th>
                               <th className='p-2'>Created At</th>
-                              <th className='p-2'>Action</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -162,11 +111,6 @@ const ViewPatient = () => {
                                 <td className='p-2'>{appointments.patientId}</td>
                                 <td className='p-2'>{appointments.doctorId}</td>
                                 <td className='p-2'>{new Date(appointments.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
-                                <td className='p-2'>
-                                  <div className='flex'>
-                                    <span className='text-blue-600 text-xl'><Link to={`/app/updateuser/${appointments.userId}`}><MdEdit /></Link></span>
-                                  </div>
-                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -212,4 +156,4 @@ const ViewPatient = () => {
   )
 }
 
-export default ViewPatient
+export default ViewDocAppointments 

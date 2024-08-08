@@ -14,7 +14,7 @@ const UpdatePatient = () => {
   useEffect(() => {
     const getUserById = async () => {
       try {
-        const response = await axios.get(`/users/${id}`);
+        const response = await axios.get(`/patients/${id}`);
         setFirstName(response.data.firstName);
         setLastName(response.data.lastName);
         setRole(response.data.role);
@@ -28,13 +28,13 @@ const UpdatePatient = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/users/${id}`, 
+      await axios.put(`/patients/${id}`, 
         { firstName, lastName, role}
       );
-      toast.success('User Updated');
-      navigate('/app/users');
+      toast.success('Patient Updated');
+      navigate('/app/patients');
     } catch (error) {
-      toast.error('Failed to update user');
+      toast.error('Failed to update patient');
       console.log(error);
     }
   };

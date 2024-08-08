@@ -21,6 +21,7 @@ import ViewPatient from './pages/Patients/ViewPatient'
 import UpdatePatient from './pages/Patients/UpdatePatient'
 import Doctor from './pages/Doctors/Doctor'
 import AddDoctor from './pages/Doctors/AddDoctor'
+import ViewDocAppointments from './pages/Doctors/ViewDocAppointments'
 
 
 const Layout = () => {
@@ -68,6 +69,7 @@ const Layout = () => {
               <Route path='/updatepatient/:id' element={<UpdatePatient />} />
               <Route path='/doctors' element={<Doctor />} />
               <Route path='/adddoctor' element={<AddDoctor />} />
+              <Route path='/viewappointments/:id' element={<ViewDocAppointments />} />
               <Route path='/unauthorised' element={<Unauthorised />} />
               <Route path='*' element={<Missing />} />
             </Routes>

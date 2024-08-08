@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from '../../api/api';
 import { Link } from 'react-router-dom';
-import { MdOutlineBlock, } from 'react-icons/md';
+import { MdOutlineBlock, MdRemoveRedEye } from 'react-icons/md';
 import Loader from '../Loader';
 import Pagination from '../Pagination';
 
@@ -95,8 +95,9 @@ const Doctor = () => {
                           <th className='p-2'>Last Names</th>
                           <th className='p-2'>Email</th>
                           <th className='p-2'>Speciality</th>
-                          <th className='p-2'>Phone NUmber</th>
+                          <th className='p-2'>Phone Number</th>
                           <th className='p-2'>Created At</th>
+                          <th className='p-2'>View</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -109,6 +110,9 @@ const Doctor = () => {
                             <td className='p-2'>{doc.speciality}</td>
                             <td className='p-2'>{doc.phoneNumber}</td>
                             <td className='p-2'>{new Date(doc.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
+                            <td>
+                              <span className='text-blue-600 text-xl'><Link to={`/app/viewappointments/${doc.doctorId}`}><MdRemoveRedEye /></Link></span>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
