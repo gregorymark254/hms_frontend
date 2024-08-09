@@ -29,7 +29,7 @@ const UpdateUser = () => {
     e.preventDefault();
     try {
       await axios.put(`/users/${id}`, 
-        { firstName, lastName, role}
+        { firstName, lastName, role }
       );
       toast.success('User Updated');
       navigate('/app/users');

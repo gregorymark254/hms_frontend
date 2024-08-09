@@ -23,7 +23,11 @@ const AddUser = () => {
       navigate('/app/users')
     } catch (error) {
       console.log(error)
-      toast.error('Failed to add user')
+      if (error.response.status === 400) {
+        toast(error.response.data.detail)
+      } else {
+        toast.error('Failed to add user')
+      }
     }
   }
 
@@ -86,7 +90,7 @@ const AddUser = () => {
             </label>
           </div>
           <div className='my-2'>
-            <label htmlFor='password'><span>Password</span>
+            <label htmlFor='password'><span>Password (Must be greater than 8)</span>
               <input
                 type='password'
                 required

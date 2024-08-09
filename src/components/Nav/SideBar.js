@@ -99,12 +99,18 @@ const SideBar = () => {
                   </li>
                   {(user.role === 'patient' || user.role === 'supplier') && (
                     <li className='relative'>
-                      <Link to='/app/payments' className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>
+                      <Link to='/app/prescriptions' className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>
                         <span className='w-4 h-4 mr-3'><FaMoneyCheck /></span>
-                        <span>Payments</span>
+                        <span>Prescriptions</span>
                       </Link>
                     </li>
                   )}
+                  <li className='relative'>
+                      <Link to='/app/medications' className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>
+                        <span className='w-4 h-4 mr-3'><FaMoneyCheck /></span>
+                        <span>Medications</span>
+                      </Link>
+                    </li>
                 </ul>
               </div>
             </div>

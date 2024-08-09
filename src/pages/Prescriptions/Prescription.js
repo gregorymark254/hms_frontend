@@ -1,26 +1,26 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from '../../api/api';
 import { Link } from 'react-router-dom';
-import { MdOutlineBlock, MdRemoveRedEye } from 'react-icons/md';
+import { MdOutlineBlock, MdEdit } from 'react-icons/md';
 import Loader from '../Loader';
 import Pagination from '../Pagination';
 
-const Doctor = () => {
+const Prescription = () => {
 
-  const [doctor,setDoctor] = useState([])
+  const [prescriptions,setPrescriptions] = useState('')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(20);
   const [total, setTotal] = useState(0);
-  const [searchDoctor, setSearchDoctor] = useState('');
+  const [searchPrescription, setSearchPrescription] = useState('');
 
   
-  // Fetch All doctor
-  const getDoctors = useCallback(async (offset, limit, search) => {
+  // Fetch All prescriptions
+  const getPrescriptions = useCallback(async (offset, limit, search) => {
     try {
-      const response = await axios.get(`/doctors/?offset=${offset}&limit=${limit}&search=${search}`);
-      setDoctor(response.data.items);
+      const response = await axios.get(`/prescription/?offset=${offset}&limit=${limit}&search=${search}`);
+      setPrescriptions(response.data.items);
       setTotal(response.data.total);
       setLoading(false);
     } catch (error) {
@@ -30,9 +30,9 @@ const Doctor = () => {
     }
   },[]);
 
-  // Search doctor
+  // Search prescriptions
   const handleSearchChange = (e) => {
-    setSearchDoctor(e.target.value);
+    setSearchPrescription(e.target.value);
     setCurrentPage(1);
   };
 
@@ -40,18 +40,18 @@ const Doctor = () => {
   useEffect(() => {
     const timerId = setTimeout(() => {
       setLoading(true);
-      getDoctors((currentPage - 1) * recordsPerPage, recordsPerPage, searchDoctor);
+      getPrescriptions((currentPage - 1) * recordsPerPage, recordsPerPage, searchPrescription);
     }, 500);
     return () => clearTimeout(timerId);
-  }, [currentPage, recordsPerPage, searchDoctor, getDoctors]);
+  }, [currentPage, recordsPerPage, searchPrescription, getPrescriptions]);
 
 
   return (
     <div className='mx-auto p-4'>
       <div className='bg-white rounded-lg p-4 lg:w-[78vw] xl:w-[81vw] 2xl:w-full'>
         <div className='flex flex-wrap items-center justify-between py-3'>
-          <Link to='/app/adddoctor' className='bg-[#007CFF] hover:bg-[#7c86f9] text-white px-5 py-2 rounded-lg'>Add Docor</Link>
-          <h5 className='text-[#007CFF]'>Showing {doctor.length} out of {total} doctor</h5>
+          <Link to='/app/addprescription' className='bg-[#007CFF] hover:bg-[#7c86f9] text-white px-5 py-2 rounded-lg'>Add Prescription</Link>
+          <h5 className='text-[#007CFF]'>Showing {prescriptions.length} out of {total} prescriptions</h5>
           <div className='py-2'>
             <form>
               <label htmlFor='search'><span className='hidden'>Search</span>
@@ -60,8 +60,8 @@ const Doctor = () => {
                   id='search'
                   className='px-3 py-1.5 border bg-[#f2f9ff] border-slate-300 placeholder-slate-400 rounded-md focus:outline-none focus:border-[#007CFF] focus:ring-[#007CFF] focus:ring-1'
                   required
-                  placeholder='Search doctor'
-                  value={searchDoctor}
+                  placeholder='Search prescriptions'
+                  value={searchPrescription}
                   onChange={handleSearchChange}
                 />
               </label>
@@ -85,33 +85,31 @@ const Doctor = () => {
               )
             : (
               <div className='overflow-x-auto h-[73vh]'>
-                {doctor.length > 0
+                {prescriptions.length > 0
                   ? (
                     <table className='w-full text-left table-auto'>
                       <thead>
                         <tr className='border-b border-slate-500'>
                           <th className='p-2'>ID</th>
-                          <th className='p-2'>First Name</th>
-                          <th className='p-2'>Last Names</th>
-                          <th className='p-2'>Email</th>
-                          <th className='p-2'>Speciality</th>
-                          <th className='p-2'>Phone Number</th>
+                          <th className='p-2'>Prescription Name</th>
+                          <th className='p-2'>Dosage</th>
+                          <th className='p-2'>Instructions</th>
+                          <th className='p-2'>Duration</th>
                           <th className='p-2'>Created At</th>
-                          <th className='p-2'>View</th>
+                          <th className='p-2'>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {doctor.map((doc) => (
-                          <tr key={doc.doctorId}>
-                            <td className='p-2 '>{doc.doctorId}</td>
-                            <td className='p-2 '>{doc.firstName}</td>
-                            <td className='p-2'>{doc.lastName}</td>
-                            <td className='p-2'>{doc.email}</td>
-                            <td className='p-2'>{doc.speciality}</td>
-                            <td className='p-2'>{doc.phoneNumber}</td>
-                            <td className='p-2'>{new Date(doc.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
+                        {prescriptions.map((prescription) => (
+                          <tr key={prescription.prescriptionId}>
+                            <td className='p-2 '>{prescription.prescriptionId}</td>
+                            <td className='p-2 '>{prescription.prescriptionName}</td>
+                            <td className='p-2'>{prescription.dosage}</td>
+                            <td className='p-2'>{prescription.instructions}</td>
+                            <td className='p-2'>{prescription.duration}</td>
+                            <td className='p-2'>{new Date(prescription.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
                             <td>
-                              <span className='text-blue-600 text-xl'><Link to={`/app/viewappointments/${doc.doctorId}`}><MdRemoveRedEye /></Link></span>
+                              <span className='text-blue-600 text-xl'><Link to={`/app/updateprescription/${prescription.prescriptionId}`}><MdEdit /></Link></span>
                             </td>
                           </tr>
                         ))}
@@ -156,4 +154,4 @@ const Doctor = () => {
   )
 }
 
-export default Doctor
+export default Prescription

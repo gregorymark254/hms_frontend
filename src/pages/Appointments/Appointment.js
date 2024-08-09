@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from '../../api/api';
-import { Link } from 'react-router-dom';
-import { MdOutlineBlock, MdEdit, } from 'react-icons/md';
+import { MdOutlineBlock, } from 'react-icons/md';
 import Loader from '../Loader';
 import Pagination from '../Pagination';
 
@@ -96,7 +95,6 @@ const Appointment = () => {
                           <th className='p-2'>Patient Name</th>
                           <th className='p-2'>Doctors Name</th>
                           <th className='p-2'>Created At</th>
-                          <th className='p-2'>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -109,11 +107,6 @@ const Appointment = () => {
                             <td className='p-2'>{appointments.patientId}</td>
                             <td className='p-2'>{appointments.doctorId}</td>
                             <td className='p-2'>{new Date(appointments.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
-                            <td className='p-2'>
-                              <div className='flex'>
-                                <span className='text-blue-600 text-xl'><Link to={`/app/updateuser/${appointments.userId}`}><MdEdit /></Link></span>
-                              </div>
-                            </td>
                           </tr>
                         ))}
                       </tbody>

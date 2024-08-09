@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from '../../api/api';
 import { Link } from 'react-router-dom';
-import { MdOutlineBlock, MdEdit, MdDelete, } from 'react-icons/md';
+import { MdOutlineBlock, MdEdit } from 'react-icons/md';
 import Loader from '../Loader';
 import Pagination from '../Pagination';
-import { toast } from 'sonner'
 
 const Users = () => {
 
@@ -46,21 +45,6 @@ const Users = () => {
     return () => clearTimeout(timerId);
   }, [currentPage, recordsPerPage, searchUser, getUsers]);
 
-
-  // delete a User
-  const deleteUser = async (id) => {
-    const confirmed = window.confirm('Are you sure you want to delete this User?');
-    if (confirmed) {
-      try {
-        await axios.delete(`/api/deleteuser/${id}`);
-        toast.success('User Deleted');
-        getUsers((currentPage - 1) * recordsPerPage, recordsPerPage, searchUser);
-      } catch (error) {
-        toast.error('Delete failed');
-        console.log(error);
-      }
-    }
-  };
 
   return (
     <div className='mx-auto p-4'>
@@ -125,10 +109,7 @@ const Users = () => {
                             <td className='p-2'>{user.role}</td>
                             <td className='p-2'>{new Date(user.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
                             <td className='p-2'>
-                              <div className='flex'>
-                                <span className='text-blue-600 text-xl'><Link to={`/app/updateuser/${user.userId}`}><MdEdit /></Link></span>
-                                  <button onClick={() => deleteUser(user.userId)} className='text-red-500 text-xl'><MdDelete /></button>
-                              </div>
+                              <span className='text-blue-600 text-xl'><Link to={`/app/updateuser/${user.userId}`}><MdEdit /></Link></span>
                             </td>
                           </tr>
                         ))}

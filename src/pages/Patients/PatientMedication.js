@@ -1,26 +1,27 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import axios from '../../api/api';
-import { Link } from 'react-router-dom';
-import { MdOutlineBlock, MdRemoveRedEye } from 'react-icons/md';
+import React, { useState, useEffect, useCallback} from 'react'
+import axios from '../../api/api'
+import { useParams, Link } from 'react-router-dom';
+import { MdOutlineBlock, MdEdit, } from 'react-icons/md';
 import Loader from '../Loader';
 import Pagination from '../Pagination';
 
-const Doctor = () => {
 
-  const [doctor,setDoctor] = useState([])
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+const PatientMedication = () => {
+
+  const [medication, setMedication] = useState('')
   const [recordsPerPage, setRecordsPerPage] = useState(20);
+  const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [searchDoctor, setSearchDoctor] = useState('');
+  const [searchMedication, setSearchMedication] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null)
+  const { id } = useParams();
 
-  
-  // Fetch All doctor
-  const getDoctors = useCallback(async (offset, limit, search) => {
+  // Fetch All medication by patient id
+  const getAppointmentsById = useCallback(async (offset, limit) => {
     try {
-      const response = await axios.get(`/doctors/?offset=${offset}&limit=${limit}&search=${search}`);
-      setDoctor(response.data.items);
+      const response = await axios.get(`/medication/?patientId=${id}&offset=${offset}&limit=${limit}`);
+      setMedication(response.data.items);
       setTotal(response.data.total);
       setLoading(false);
     } catch (error) {
@@ -28,11 +29,11 @@ const Doctor = () => {
       setError(error);
       setLoading(false);
     }
-  },[]);
+  },[id]);
 
-  // Search doctor
+  // Search appointment
   const handleSearchChange = (e) => {
-    setSearchDoctor(e.target.value);
+    setSearchMedication(e.target.value);
     setCurrentPage(1);
   };
 
@@ -40,18 +41,17 @@ const Doctor = () => {
   useEffect(() => {
     const timerId = setTimeout(() => {
       setLoading(true);
-      getDoctors((currentPage - 1) * recordsPerPage, recordsPerPage, searchDoctor);
+      getAppointmentsById((currentPage - 1) * recordsPerPage, recordsPerPage, searchMedication);
     }, 500);
     return () => clearTimeout(timerId);
-  }, [currentPage, recordsPerPage, searchDoctor, getDoctors]);
-
+  }, [currentPage, recordsPerPage, searchMedication, getAppointmentsById]);
 
   return (
-    <div className='mx-auto p-4'>
-      <div className='bg-white rounded-lg p-4 lg:w-[78vw] xl:w-[81vw] 2xl:w-full'>
+    <div>
+      <div className='bg-white rounded-lg p-4'>
         <div className='flex flex-wrap items-center justify-between py-3'>
-          <Link to='/app/adddoctor' className='bg-[#007CFF] hover:bg-[#7c86f9] text-white px-5 py-2 rounded-lg'>Add Docor</Link>
-          <h5 className='text-[#007CFF]'>Showing {doctor.length} out of {total} doctor</h5>
+          <Link to={`/app/addmedication/${id}`} className='bg-[#007CFF] hover:bg-[#7c86f9] text-white px-5 py-2 rounded-lg'>Add Medication</Link>
+          <h5 className='text-[#007CFF]'>Showing {medication.length} out of {total} medications</h5>
           <div className='py-2'>
             <form>
               <label htmlFor='search'><span className='hidden'>Search</span>
@@ -60,8 +60,8 @@ const Doctor = () => {
                   id='search'
                   className='px-3 py-1.5 border bg-[#f2f9ff] border-slate-300 placeholder-slate-400 rounded-md focus:outline-none focus:border-[#007CFF] focus:ring-[#007CFF] focus:ring-1'
                   required
-                  placeholder='Search doctor'
-                  value={searchDoctor}
+                  placeholder='Search medication'
+                  value={searchMedication}
                   onChange={handleSearchChange}
                 />
               </label>
@@ -70,13 +70,13 @@ const Doctor = () => {
         </div>
         {loading
           ? (
-            <div className='flex items-center justify-center bg-[#f1f4f6] h-screen md:h-[56em] lg:h-[25em] xl:h-[35em] 2xl:lg:h-[48em]'>
+            <div className='flex items-center justify-center bg-[#f1f4f6] h-[50vh]'>
               <Loader />
             </div>
             )
           : error
             ? (
-              <div className='bg-[#f1f4f6] grid place-items-center h-screen md:h-[56em] lg:h-[25em] xl:h-[35em] 2xl:lg:h-[48em]'>
+              <div className='bg-[#f1f4f6] grid place-items-center h-[50vh]'>
                 <div className='grid place-items-center'>
                   <h2><MdOutlineBlock /></h2>
                   <h4>Error occurred while fetching data</h4>
@@ -84,34 +84,36 @@ const Doctor = () => {
               </div>
               )
             : (
-              <div className='overflow-x-auto h-[73vh]'>
-                {doctor.length > 0
+              <div className='overflow-x-auto h-[50vh]'>
+                {medication.length > 0
                   ? (
                     <table className='w-full text-left table-auto'>
                       <thead>
                         <tr className='border-b border-slate-500'>
                           <th className='p-2'>ID</th>
-                          <th className='p-2'>First Name</th>
-                          <th className='p-2'>Last Names</th>
-                          <th className='p-2'>Email</th>
-                          <th className='p-2'>Speciality</th>
-                          <th className='p-2'>Phone Number</th>
+                          <th className='p-2'>Diagnosis</th>
+                          <th className='p-2'>Treatment</th>
+                          <th className='p-2'>Notes</th>
+                          <th className='p-2'>Patient Name</th>
+                          <th className='p-2'>Prescription Name</th>
                           <th className='p-2'>Created At</th>
-                          <th className='p-2'>View</th>
+                          <th className='p-2'>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {doctor.map((doc) => (
-                          <tr key={doc.doctorId}>
-                            <td className='p-2 '>{doc.doctorId}</td>
-                            <td className='p-2 '>{doc.firstName}</td>
-                            <td className='p-2'>{doc.lastName}</td>
-                            <td className='p-2'>{doc.email}</td>
-                            <td className='p-2'>{doc.speciality}</td>
-                            <td className='p-2'>{doc.phoneNumber}</td>
-                            <td className='p-2'>{new Date(doc.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
-                            <td>
-                              <span className='text-blue-600 text-xl'><Link to={`/app/viewappointments/${doc.doctorId}`}><MdRemoveRedEye /></Link></span>
+                        {medication.map((medications) => (
+                          <tr key={medications.medicationId}>
+                            <td className='p-2 '>{medications.medicationId}</td>
+                            <td className='p-2 '>{medications.diagnosis}</td>
+                            <td className='p-2'>{medications.treatment}</td>
+                            <td className='p-2'>{medications.notes}</td>
+                            <td className='p-2'>{medications.patientId}</td>
+                            <td className='p-2'>{medications.prescriptionId}</td>
+                            <td className='p-2'>{new Date(medications.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
+                            <td className='p-2'>
+                              <div className='flex'>
+                                <span className='text-blue-600 text-xl'><Link to={`/app/updateuser/${medications.medicationId}`}><MdEdit /></Link></span>
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -119,7 +121,7 @@ const Doctor = () => {
                     </table>
                     )
                   : (
-                    <div className='bg-[#f1f4f6] grid place-items-center h-screen md:h-[56em] lg:h-[25em] xl:h-[35em] 2xl:lg:h-[48em]'>
+                    <div className='bg-[#f1f4f6] grid place-items-center h-[50vh]'>
                       <div className='grid place-items-center'>
                         <h2><MdOutlineBlock /></h2>
                         <h4>No Data</h4>
@@ -156,4 +158,4 @@ const Doctor = () => {
   )
 }
 
-export default Doctor
+export default PatientMedication
