@@ -32,7 +32,7 @@ const SideBar = () => {
                       <span>DashBoard</span>
                     </Link>
                   </li>
-                  {user.role === 'patient' && (
+                  {user.role === 'admin' && (
                     <li className='relative' id='sidenavXxEx1'>
                       <span className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] transition duration-300 ease-in-out cursor-pointer' data-mdb-ripple='true' data-mdb-ripple-color='primary' data-bs-toggle='collapse' data-bs-target='#collapseSidenavXxEx1' aria-expanded='false' aria-controls='collapseSidenavXxEx1'>
                         <span className='w-4 h-4 mr-3'><FaUsers /></span>
@@ -49,7 +49,7 @@ const SideBar = () => {
                       </ul>
                     </li>
                   )}
-                  {(user.role === 'patient' || user.role === 'supplier') && (
+                  {(user.role === 'patient' || user.role === 'admin') && (
                     <li className='relative' id='sidenavXxEx2'>
                       <span className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] transition duration-300 ease-in-out cursor-pointer' data-mdb-ripple='true' data-mdb-ripple-color='primary' data-bs-toggle='collapse' data-bs-target='#collapseSidenavXxEx2' aria-expanded='false' aria-controls='collapseSidenavXxEx2'>
                         <span className='w-4 h-4 mr-3'><FaUserMinus /></span>
@@ -70,7 +70,7 @@ const SideBar = () => {
                       <span className='w-4 h-4 ml-auto text-xl'><MdOutlineKeyboardArrowDown /></span>
                     </span>
                     <ul className='relative accordion-collapse collapse' id='collapseSidenavXxEx4' aria-labelledby='sidenavXxEx4' data-bs-parent='#sidenavSecExample'>
-                      {(user.role === 'patient' || user.role === 'supplier') && (
+                      {(user.role === 'patient' || user.role === 'admin') && (
                         <li className='relative'>
                           <Link to='/app/patients' className='flex items-center text-xs py-4 pl-12 pr-6 h-6 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>All Patients</Link>
                         </li>
@@ -87,7 +87,7 @@ const SideBar = () => {
                       <span className='w-4 h-4 ml-auto text-xl'><MdOutlineKeyboardArrowDown /></span>
                     </span>
                     <ul className='relative accordion-collapse collapse' id='collapseSidenavXxEx5' aria-labelledby='sidenavXxEx5' data-bs-parent='#sidenavSecExample'>
-                      {(user.role === 'patient' || user.role === 'supplier') && (
+                      {(user.role === 'patient' || user.role === 'admin') && (
                         <li className='relative'>
                           <Link to='/app/doctors' className='flex items-center text-xs py-4 pl-12 pr-6 h-6 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>All Doctors</Link>
                         </li>
@@ -97,7 +97,7 @@ const SideBar = () => {
                       </li>
                     </ul>
                   </li>
-                  {(user.role === 'patient' || user.role === 'supplier') && (
+                  {(user.role === 'patient' || user.role === 'admin') && (
                     <li className='relative'>
                       <Link to='/app/prescriptions' className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>
                         <span className='w-4 h-4 mr-3'><FaMoneyCheck /></span>
@@ -106,11 +106,23 @@ const SideBar = () => {
                     </li>
                   )}
                   <li className='relative'>
-                      <Link to='/app/medications' className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>
-                        <span className='w-4 h-4 mr-3'><FaMoneyCheck /></span>
-                        <span>Medications</span>
-                      </Link>
-                    </li>
+                    <Link to='/app/medications' className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>
+                      <span className='w-4 h-4 mr-3'><FaMoneyCheck /></span>
+                      <span>Medications</span>
+                    </Link>
+                  </li>
+                  <li className='relative'>
+                    <Link to='/app/medications' className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>
+                      <span className='w-4 h-4 mr-3'><FaMoneyCheck /></span>
+                      <span>Billings</span>
+                    </Link>
+                  </li>
+                  <li className='relative'>
+                    <Link to='/app/medications' className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden whitespace-nowrap text-[#7987a1] hover:text-[#007CFF] focus:text-[#007CFF] focus:border-l-2 focus:border-l-[#007CFF] transition duration-300 ease-in-out' data-mdb-ripple='true' data-mdb-ripple-color='primary'>
+                      <span className='w-4 h-4 mr-3'><FaMoneyCheck /></span>
+                      <span>Payments</span>
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
