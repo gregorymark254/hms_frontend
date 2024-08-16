@@ -46,11 +46,17 @@ const Doctor = () => {
   }, [currentPage, recordsPerPage, searchDoctor, getDoctors]);
 
 
+  // getting current user
+  const currentUser = window.localStorage.getItem('token');
+  const user = JSON.parse(currentUser).data.user_data;
+
   return (
     <div className='mx-auto p-4'>
       <div className='bg-white rounded-lg p-4 lg:w-[78vw] xl:w-[81vw] 2xl:w-full'>
         <div className='flex flex-wrap items-center justify-between py-3'>
-          <Link to='/app/adddoctor' className='bg-[#007CFF] hover:bg-[#7c86f9] text-white px-5 py-2 rounded-lg'>Add Docor</Link>
+          {(user.role === 'admin') && (
+            <Link to='/app/adddoctor' className='bg-[#007CFF] hover:bg-[#7c86f9] text-white px-5 py-2 rounded-lg'>Add Doctor</Link>
+          )}
           <h5 className='text-[#007CFF]'>Showing {doctor.length} out of {total} doctor</h5>
           <div className='py-2'>
             <form>

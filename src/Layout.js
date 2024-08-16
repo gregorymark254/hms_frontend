@@ -28,6 +28,8 @@ import AddPrescription from './pages/Prescriptions/AddPrescription'
 import UpdatePrescription from './pages/Prescriptions/UpdatePrescription'
 import Medication from './pages/Medications/Medication'
 import PatientMedication from './pages/Medications/PatientMediacation'
+import Billing from './pages/Billing/Billing'
+import Payment from './pages/Payments/Payment'
 
 
 const Layout = () => {
@@ -82,6 +84,8 @@ const Layout = () => {
               <Route path='/updateprescription/:id' element={<UpdatePrescription />} />
               <Route path='/medications' element={<Medication />} />
               <Route path='/addmedication/:id' element={<PatientMedication />} />
+              <Route path='/billings' element={<Billing />} />
+              <Route path='/payments' element={<Payment />} />
               <Route path='/unauthorised' element={<Unauthorised />} />
               <Route path='*' element={<Missing />} />
             </Routes>

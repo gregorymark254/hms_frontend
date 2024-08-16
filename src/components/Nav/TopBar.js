@@ -49,7 +49,7 @@ const Navbar = () => {
             <a className='dropdown-toggle px-4 py-1  text-black font-medium transition duration-150 ease-in-out flex items -center whitespace-nowrap ' href='/#' type='button' id='dropdownMenuButton2' data-bs-toggle='dropdown' aria-expanded='false'>
               <div className='grid'>
                 <span className='font-bold text-[#007CFF]'>{user.firstName} {user.lastName}</span>
-                <span className='text-[#007CFF]'>{user.role}</span>
+                <span className='text-green-700 font-bold'>{user.role}</span>
               </div>
               <span className='w-4 h-4 ml-auto mb-6 text-xl text-[#007CFF]'><MdOutlineKeyboardArrowDown /></span>
             </a>

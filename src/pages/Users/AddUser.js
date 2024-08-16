@@ -84,7 +84,7 @@ const AddUser = () => {
                 <option value="">Role</option>
                 <option value="admin">Admin</option>
                 <option value="doctor">Doctor</option>
-                <option value="patient">Patient</option>
+                <option value="reception">Reception</option>
                 <option value="pharmacy">Pharmacy</option>
               </select>
             </label>

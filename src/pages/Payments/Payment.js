@@ -4,22 +4,22 @@ import { MdOutlineBlock, } from 'react-icons/md';
 import Loader from '../Loader';
 import Pagination from '../Pagination';
 
-const Appointment = () => {
+const Payment = () => {
 
-  const [appointment,setAppointment] = useState('')
+  const [payments,setPayments] = useState('')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(20);
   const [total, setTotal] = useState(0);
-  const [searchAppointment, setSearchAppointment] = useState('');
+  const [searchPayment, setSearchPayment] = useState('');
 
   
-  // Fetch All appointment
+  // Fetch All payments
   const getAppointments = useCallback(async (offset, limit, search) => {
     try {
-      const response = await axios.get(`/appointments/?offset=${offset}&limit=${limit}&search=${search}`);
-      setAppointment(response.data.items);
+      const response = await axios.get(`/payments/?offset=${offset}&limit=${limit}&search=${search}`);
+      setPayments(response.data.items);
       setTotal(response.data.total);
       setLoading(false);
     } catch (error) {
@@ -29,9 +29,9 @@ const Appointment = () => {
     }
   },[]);
 
-  // Search appointment
+  // Search payments
   const handleSearchChange = (e) => {
-    setSearchAppointment(e.target.value);
+    setSearchPayment(e.target.value);
     setCurrentPage(1);
   };
 
@@ -39,17 +39,17 @@ const Appointment = () => {
   useEffect(() => {
     const timerId = setTimeout(() => {
       setLoading(true);
-      getAppointments((currentPage - 1) * recordsPerPage, recordsPerPage, searchAppointment);
+      getAppointments((currentPage - 1) * recordsPerPage, recordsPerPage, searchPayment);
     }, 500);
     return () => clearTimeout(timerId);
-  }, [currentPage, recordsPerPage, searchAppointment, getAppointments]);
+  }, [currentPage, recordsPerPage, searchPayment, getAppointments]);
 
 
   return (
     <div className='mx-auto p-4'>
       <div className='bg-white rounded-lg p-4'>
         <div className='flex flex-wrap items-center justify-between py-3'>
-          <h5 className='text-[#007CFF]'>Showing {appointment.length} out of {total} appointment</h5>
+          <h5 className='text-[#007CFF]'>Showing {payments.length} out of {total} payments</h5>
           <div className='py-2'>
             <form>
               <label htmlFor='search'><span className='hidden'>Search</span>
@@ -58,8 +58,8 @@ const Appointment = () => {
                   id='search'
                   className='px-3 py-1.5 border bg-[#f2f9ff] border-slate-300 placeholder-slate-400 rounded-md focus:outline-none focus:border-[#007CFF] focus:ring-[#007CFF] focus:ring-1'
                   required
-                  placeholder='Search appointments'
-                  value={searchAppointment}
+                  placeholder='Search payment'
+                  value={searchPayment}
                   onChange={handleSearchChange}
                 />
               </label>
@@ -83,34 +83,32 @@ const Appointment = () => {
               )
             : (
               <div className='overflow-x-auto h-[73vh]'>
-                {appointment.length > 0
+                {payments.length > 0
                   ? (
                     <table className='w-full text-left table-auto'>
                       <thead>
                         <tr className='border-b border-slate-500'>
                           <th className='p-2'>ID</th>
-                          <th className='p-2'>Appointment Date</th>
-                          <th className='p-2'>Reason</th>
-                          <th className='p-2'>Status</th>
+                          <th className='p-2'>Transaction ID</th>
+                          <th className='p-2'>Bill ID</th>
+                          <th className='p-2'>Payment Method</th>
+                          <th className='p-2'>Amount</th>
                           <th className='p-2'>Patient Name</th>
-                          <th className='p-2'>Doctors Name</th>
+                          <th className='p-2'>Payment Date</th>
                           <th className='p-2'>Created At</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {appointment.map((appointments) => (
-                          <tr key={appointments.appointmentId}>
-                            <td className='p-2 '>{appointments.appointmentId}</td>
-                            <td className='p-2 '>{appointments.appointmentDate}</td>
-                            <td className='p-2'>{appointments.reason}</td>
-                            <td className='p-2'>
-                              {appointments.status === 'pending' 
-                              ? (<span className='bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-full'>Pending</span>) 
-                              : (<span className='bg-green-100 text-greeb-700 font-bold px-3 py-1 rounded-full'>Paid</span>)}
-                            </td>
-                            <td className='p-2'>{appointments.patientId}</td>
-                            <td className='p-2'>{appointments.doctorId}</td>
-                            <td className='p-2'>{new Date(appointments.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
+                        {payments.map((pay) => (
+                          <tr key={pay.paymentId}>
+                            <td className='p-2 '>{pay.paymentId}</td>
+                            <td className='p-2 '>{pay.transactionId}</td>
+                            <td className='p-2 '>{pay.billingId}</td>
+                            <td className='p-2 '>{pay.paymentMethod}</td>
+                            <td className='p-2'>{pay.amount}</td>
+                            <td className='p-2'>{pay.patientId}</td>
+                            <td className='p-2'>{new Date(pay.paymentDate).toISOString().replace('T', ' ').slice(0, 19)}</td>
+                            <td className='p-2'>{new Date(pay.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -154,4 +152,4 @@ const Appointment = () => {
   )
 }
 
-export default Appointment
+export default Payment

@@ -106,7 +106,11 @@ const ViewDocAppointments = () => {
                               <td className='p-2 '>{appointments.appointmentId}</td>
                               <td className='p-2 '>{appointments.appointmentDate}</td>
                               <td className='p-2'>{appointments.reason}</td>
-                              <td className='p-2'>{appointments.status}</td>
+                              <td className='p-2'>
+                                {appointments.status === 'pending' 
+                                ? (<span className='bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-full'>Pending</span>) 
+                                : (<span className='bg-green-100 text-greeb-700 font-bold px-3 py-1 rounded-full'>Paid</span>)}
+                              </td>
                               <td className='p-2'>{appointments.patientId}</td>
                               <td className='p-2'>{appointments.doctorId}</td>
                               <td className='p-2'>{new Date(appointments.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>

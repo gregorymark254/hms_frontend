@@ -1,11 +1,11 @@
 import React from 'react';
-import { FaUsers, FaMoneyCheck, FaCartArrowDown } from "react-icons/fa";
+import { FaUsers, FaMoneyCheck, FaBook } from "react-icons/fa";
 
 const Home = () => {
 
   // getting current user
   const currentUser = window.localStorage.getItem('token');
-  const user = JSON.parse(currentUser).data;
+  const user = JSON.parse(currentUser).data.user_data;
 
   return (
     <main>
@@ -25,10 +25,10 @@ const Home = () => {
               </div>
               <div className='flex items-center gap-4 bg-white p-4 rounded-md'>
                 <div className='bg-green-700 text-white p-4 rounded-lg'>
-                  <span className='text-4xl'><FaCartArrowDown /></span>
+                  <span className='text-4xl'><FaBook /></span>
                 </div>
                 <div>
-                  <h4><b>All Orders</b></h4>
+                  <h4><b>Appointments</b></h4>
                   <p className='text-green-700 font-bold'>9,242</p>
                 </div>
               </div>
@@ -37,8 +37,8 @@ const Home = () => {
                   <span className='text-4xl'><FaMoneyCheck /></span>
                 </div>
                 <div>
-                  <h4><b>All Payments</b></h4>
-                  <p className='text-orange-700 font-bold'>234,230</p>
+                  <h4><b>Total Payments</b></h4>
+                  <p className='text-orange-700 font-bold'>Ksh 234,230</p>
                 </div>
               </div>
             </div>
