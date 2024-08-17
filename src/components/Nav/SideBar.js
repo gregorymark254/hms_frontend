@@ -16,7 +16,7 @@ const SideBar = () => {
     <main className='bg-[#0c1427] text-white h-screen md:overflow-hidden relative overflow-auto md:hover:overflow-auto pb-10'>
       {activeMenu && (
         <>
-          <div className='flex justify-between items-center p-3.5 font-sans font-bold border-b border-b-[#7987a1]'>
+          <div className='flex justify-between items-center relative p-4 font-sans font-bold border-b border-b-[#7987a1]'>
             <h3>Medix <span className='text-[#007CFF]'>Solutions</span></h3>
             <div className='text-xl rounded-full hover:bg-light-gray block md:hidden'>
               <button onClick={() => setActiveMenu(!activeMenu)}><MdOutlineCancel /></button>
