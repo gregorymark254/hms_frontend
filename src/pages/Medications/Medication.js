@@ -89,11 +89,11 @@ const Medication = () => {
                       <thead>
                         <tr className='border-b border-slate-500'>
                           <th className='p-2'>ID</th>
+                          <th className='p-2'>Patient Name</th>
                           <th className='p-2'>Diagnosis</th>
                           <th className='p-2'>Treatment</th>
                           <th className='p-2'>Notes</th>
-                          <th className='p-2'>Patient ID</th>
-                          <th className='p-2'>Prescription ID</th>
+                          <th className='p-2'>Prescription Name</th>
                           <th className='p-2'>Created At</th>
                         </tr>
                       </thead>
@@ -101,11 +101,11 @@ const Medication = () => {
                         {medications.map((medication) => (
                           <tr key={medication.medicationId}>
                             <td className='p-2 '>{medication.medicationId}</td>
+                            <td className='p-2'>{medication.patient_name}</td>
                             <td className='p-2 '>{medication.diagnosis}</td>
                             <td className='p-2'>{medication.treatment}</td>
                             <td className='p-2'>{medication.notes}</td>
-                            <td className='p-2'>{medication.patientId}</td>
-                            <td className='p-2'>{medication.prescriptionId}</td>
+                            <td className='p-2'>{medication.prescriptionName}</td>
                             <td className='p-2'>{new Date(medication.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
                           </tr>
                         ))}

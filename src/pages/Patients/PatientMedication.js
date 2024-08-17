@@ -91,30 +91,24 @@ const PatientMedication = () => {
                       <thead>
                         <tr className='border-b border-slate-500'>
                           <th className='p-2'>ID</th>
+                          <th className='p-2'>Patient Name</th>
                           <th className='p-2'>Diagnosis</th>
                           <th className='p-2'>Treatment</th>
                           <th className='p-2'>Notes</th>
-                          <th className='p-2'>Patient Name</th>
                           <th className='p-2'>Prescription Name</th>
                           <th className='p-2'>Created At</th>
-                          <th className='p-2'>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {medication.map((medications) => (
                           <tr key={medications.medicationId}>
                             <td className='p-2 '>{medications.medicationId}</td>
+                            <td className='p-2'>{medications.patient_name}</td>
                             <td className='p-2 '>{medications.diagnosis}</td>
                             <td className='p-2'>{medications.treatment}</td>
                             <td className='p-2'>{medications.notes}</td>
-                            <td className='p-2'>{medications.patientId}</td>
-                            <td className='p-2'>{medications.prescriptionId}</td>
+                            <td className='p-2'>{medications.prescriptionName}</td>
                             <td className='p-2'>{new Date(medications.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
-                            <td className='p-2'>
-                              <div className='flex'>
-                                <span className='text-blue-600 text-xl'><Link to={`/app/updateuser/${medications.medicationId}`}><MdEdit /></Link></span>
-                              </div>
-                            </td>
                           </tr>
                         ))}
                       </tbody>

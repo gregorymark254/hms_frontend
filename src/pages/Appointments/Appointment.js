@@ -89,11 +89,11 @@ const Appointment = () => {
                       <thead>
                         <tr className='border-b border-slate-500'>
                           <th className='p-2'>ID</th>
+                          <th className='p-2'>Patient Names</th>
                           <th className='p-2'>Appointment Date</th>
                           <th className='p-2'>Reason</th>
-                          <th className='p-2'>Status</th>
-                          <th className='p-2'>Patient Name</th>
                           <th className='p-2'>Doctors Name</th>
+                          <th className='p-2'>Status</th>
                           <th className='p-2'>Created At</th>
                         </tr>
                       </thead>
@@ -101,15 +101,15 @@ const Appointment = () => {
                         {appointment.map((appointments) => (
                           <tr key={appointments.appointmentId}>
                             <td className='p-2 '>{appointments.appointmentId}</td>
+                            <td className='p-2'>{appointments.patient_name}</td>
                             <td className='p-2 '>{appointments.appointmentDate}</td>
                             <td className='p-2'>{appointments.reason}</td>
+                            <td className='p-2'>{appointments.doctor_name}</td>
                             <td className='p-2'>
                               {appointments.status === 'pending' 
                               ? (<span className='bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-full'>Pending</span>) 
                               : (<span className='bg-green-100 text-greeb-700 font-bold px-3 py-1 rounded-full'>Paid</span>)}
                             </td>
-                            <td className='p-2'>{appointments.patientId}</td>
-                            <td className='p-2'>{appointments.doctorId}</td>
                             <td className='p-2'>{new Date(appointments.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
                           </tr>
                         ))}

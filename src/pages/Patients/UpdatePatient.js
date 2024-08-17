@@ -121,7 +121,7 @@ const UpdatePatient = () => {
             <div className='my-2'>
               <label htmlFor='phone'><span>Phone Number</span>
                 <input
-                  type='number'
+                  type='text'
                   required
                   placeholder='070000000'
                   className='px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-[#007CFF] focus:ring-[#007CFF] block w-full rounded-md sm:text-sm focus:ring-1'
@@ -133,7 +133,7 @@ const UpdatePatient = () => {
             <div className='my-2'>
               <label htmlFor='emergency'><span>Emergency Number</span>
                 <input
-                  type='number'
+                  type='text'
                   required
                   placeholder='070000000'
                   className='px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-[#007CFF] focus:ring-[#007CFF] block w-full rounded-md sm:text-sm focus:ring-1'
@@ -145,7 +145,7 @@ const UpdatePatient = () => {
             <div className='my-2'>
               <label htmlFor='insurance'><span>Insurance Number</span>
                 <input
-                  type='number'
+                  type='text'
                   required
                   placeholder='Insurance Number'
                   className='px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-[#007CFF] focus:ring-[#007CFF] block w-full rounded-md sm:text-sm focus:ring-1'
