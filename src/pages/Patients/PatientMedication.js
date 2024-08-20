@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback} from 'react'
 import axios from '../../api/api'
 import { useParams, Link } from 'react-router-dom';
-import { MdOutlineBlock, MdEdit, } from 'react-icons/md';
+import { MdOutlineBlock } from 'react-icons/md';
 import Loader from '../Loader';
 import Pagination from '../Pagination';
 

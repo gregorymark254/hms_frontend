@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from '../../api/api';
-import { MdOutlineBlock, } from 'react-icons/md';
+import { MdOutlineBlock, MdCheck, MdClose } from 'react-icons/md';
+import { toast } from 'sonner'
 import Loader from '../Loader';
 import Pagination from '../Pagination';
+
 
 const Appointment = () => {
 
@@ -44,6 +46,32 @@ const Appointment = () => {
     return () => clearTimeout(timerId);
   }, [currentPage, recordsPerPage, searchAppointment, getAppointments]);
 
+  // confirm appointments
+  const approveAppointment = async (patientId) => {
+    try {
+      const response = await axios.put(`/appointments/${patientId}/approve`)
+      toast.success(response.data.message);
+      getAppointments((currentPage - 1) * recordsPerPage, recordsPerPage, searchAppointment);
+    } catch (error) {
+      console.log(error)
+      toast.error('Failed to confim appointment')
+    }
+  }
+
+  // cancel appointments
+  const cancelAppointment = async (patientId) => {
+    const confirmed = window.confirm('Are you sure you want to cancel this appointment');
+    if (confirmed) {
+      try {
+        const response = await axios.put(`/appointments/${patientId}/cancel`)
+        toast.success(response.data.message);
+        getAppointments((currentPage - 1) * recordsPerPage, recordsPerPage, searchAppointment);
+      } catch (error) {
+        console.log(error)
+        toast.error('Failed to cancel appointment')
+      }
+    }
+  }
 
   return (
     <div className='mx-auto p-4'>
@@ -95,6 +123,7 @@ const Appointment = () => {
                           <th className='p-2'>Doctors Name</th>
                           <th className='p-2'>Status</th>
                           <th className='p-2'>Created At</th>
+                          <th className='p-2'>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -106,11 +135,23 @@ const Appointment = () => {
                             <td className='p-2'>{appointments.reason}</td>
                             <td className='p-2'>{appointments.doctor_name}</td>
                             <td className='p-2'>
-                              {appointments.status === 'pending' 
-                              ? (<span className='bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-full'>Pending</span>) 
-                              : (<span className='bg-green-100 text-greeb-700 font-bold px-3 py-1 rounded-full'>Paid</span>)}
+                              {appointments.status === 'pending' ? (
+                                <span className='bg-blue-100 text-blue-700 font-bold px-4 py-1 rounded-full'>Pending</span>
+                              ) : appointments.status === 'confirmed' ? (
+                                <span className='bg-green-100 text-green-700 font-bold px-4 py-1 rounded-full'>Confirmed</span>
+                              ) : (
+                                <span className='bg-red-100 text-red-700 font-bold px-4 py-1 rounded-full'>Canceled</span>
+                              )}
                             </td>
                             <td className='p-2'>{new Date(appointments.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
+                            <td className='p-2'>
+                              {appointments.status === 'pending' || appointments.status === 'canceled' ? (
+                                <button onClick={() => approveAppointment(appointments.patientId)} className='flex items-center space-x-2 bg-purple-800 text-white px-4 py-0.5 rounded-full hover:bg-purple-600'><span><MdCheck /></span> Confirm</button>
+                              ) : (
+                                <button onClick={() => cancelAppointment(appointments.patientId)} className='flex items-center space-x-2 bg-red-600 text-white px-4 py-0.5 rounded-full hover:bg-red-500'><span><MdClose /></span> Cancel</button>
+                              )}
+                              
+                            </td>
                           </tr>
                         ))}
                       </tbody>

@@ -89,9 +89,9 @@ const Billing = () => {
                         <tr className='border-b border-slate-500'>
                           <th className='p-2'>ID</th>
                           <th className='p-2'>Patient Name</th>
-                          <th className='p-2'>Billing Date</th>
-                          <th className='p-2'>Status</th>
                           <th className='p-2'>Amount</th>
+                          <th className='p-2'>Status</th>
+                          <th className='p-2'>Billing Date</th>
                           <th className='p-2'>Created At</th>
                         </tr>
                       </thead>
@@ -100,13 +100,13 @@ const Billing = () => {
                           <tr key={bill.billingId}>
                             <td className='p-2'>{bill.billingId}</td>
                             <td className='p-2'>{bill.patient_name}</td>
-                            <td className='p-2'>{bill.billingDate}</td>
+                            <td className='p-2'>{bill.amount}</td>
                             <td className='p-2'>
                               {bill.status === 'pending' 
                               ? (<span className='bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-full'>Pending</span>) 
                               : (<span className='bg-green-100 text-greeb-700 font-bold px-3 py-1 rounded-full'>Paid</span>)}
-                              </td>
-                            <td className='p-2'>{bill.amount}</td>
+                            </td>
+                            <td className='p-2'>{new Date(bill.billingDate).toISOString().replace('T', ' ').slice(0, 19)}</td>
                             <td className='p-2'>{new Date(bill.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
                           </tr>
                         ))}
