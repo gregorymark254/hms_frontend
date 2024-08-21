@@ -21,8 +21,8 @@ export default function AuthToken () {
 
   const [accessToken, setAccessToken] = useState(getToken());
 
-  const saveToken = (userToken, expirationHours = 1) => {
-    const expiresAt = new Date().getTime() + expirationHours * 1000;
+  const saveToken = (userToken, expirationHours = 2) => {
+    const expiresAt = new Date().getTime() + expirationHours * 60 * 60 * 1000;
     const tokenData = { data: userToken.data, expiresAt };
 
     window.localStorage.setItem('token', JSON.stringify(tokenData));
@@ -42,7 +42,7 @@ export default function AuthToken () {
         window.location.href = '/';
         window.location.reload();
       }
-    }, 1 * 1000); // Check every 1 hour
+    }, 1 * 60 * 60 * 1000); // Check every 1 hour
 
     return () => clearInterval(checkTokenInterval);
   }, []);

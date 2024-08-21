@@ -34,9 +34,9 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
 
   return (
     <nav>
-      <ul className='border border-slate-300 rounded-md flex gap-4 items-center'>
-        <li className='px-3 py-1.5'>
-          <button className='text-[#007CFF]' onClick={goToPrevPage} disabled={currentPage === 1}>
+      <ul className='flex gap-1 items-center'>
+        <li>
+          <button className='px-3 py-1 border rounded-md bg-[#f2f9ff] border-slate-300 hover:bg-[#e2e8f0]' onClick={goToPrevPage} disabled={currentPage === 1}>
             Previous
           </button>
         </li>
@@ -47,14 +47,14 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
           >
             <button
               onClick={() => setCurrentPage(page)}
-              className={`${currentPage === page ? 'current-page bg-[#007CFF] px-3 py-1.5 text-white' : 'text-[#007CFF]'}`}
+              className={`px-3 py-1 border rounded-md ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-[#f2f9ff] border-slate-300'}`}
             >
               {page}
             </button>
           </li>
         ))}
-        <li className='px-3 py-1.5'>
-          <button className='text-[#007CFF]' onClick={goToNextPage} disabled={currentPage === nPages}>
+        <li>
+          <button className='px-3 py-1 border rounded-md bg-[#f2f9ff] border-slate-300 hover:bg-[#e2e8f0]' onClick={goToNextPage} disabled={currentPage === nPages}>
             Next
           </button>
         </li>
