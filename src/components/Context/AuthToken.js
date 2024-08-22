@@ -21,7 +21,7 @@ export default function AuthToken () {
 
   const [accessToken, setAccessToken] = useState(getToken());
 
-  const saveToken = (userToken, expirationHours = 2) => {
+  const saveToken = (userToken, expirationHours = 3) => {
     const expiresAt = new Date().getTime() + expirationHours * 60 * 60 * 1000;
     const tokenData = { data: userToken.data, expiresAt };
 

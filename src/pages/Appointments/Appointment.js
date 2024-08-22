@@ -17,7 +17,7 @@ const Appointment = () => {
   const [searchAppointment, setSearchAppointment] = useState('');
 
   
-  // Fetch All appointment
+  // Fetch All appointments
   const getAppointments = useCallback(async (offset, limit, search) => {
     try {
       const response = await axios.get(`/appointments/?offset=${offset}&limit=${limit}&search=${search}`);
