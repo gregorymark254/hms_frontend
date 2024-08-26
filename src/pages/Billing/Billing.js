@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import axios from '../../api/api';
 import { MdOutlineBlock, } from 'react-icons/md';
 import Loader from '../Loader';
+import { toast } from 'sonner'
 import Pagination from '../Pagination';
 
 const Billing = () => {
@@ -13,6 +14,12 @@ const Billing = () => {
   const [recordsPerPage, setRecordsPerPage] = useState(20);
   const [total, setTotal] = useState(0);
   const [searchBilling, setSearchBilling] = useState('');
+  const [selectedRequestId, setSelectedRequestId] = useState('');
+  const [transactionId,setTransactionId] = useState('')
+  const [amount,setAmount] = useState('')
+  const [patientId,setPatientId] = useState('')
+  const [billingId,setBillingId] = useState('')
+  const [paymentMethod,setPaymentMethod] = useState('')
 
   
   // Fetch All billing
@@ -43,6 +50,60 @@ const Billing = () => {
     }, 500);
     return () => clearTimeout(timerId);
   }, [currentPage, recordsPerPage, searchBilling, getAppointments]);
+  
+
+  // modal
+  const openModal = (billingId) => {
+    setSelectedRequestId(billingId);
+    const dialog = document.getElementById('my_modal_3');
+    if (dialog !== null) {
+      dialog.showModal();
+    }
+  };
+
+  // getting bill by id
+  const getBillById = useCallback(async () => {
+    if (selectedRequestId) {
+      try {
+        const response = await axios.get(`/billing/${selectedRequestId}`);
+        setAmount(response.data.amount || '');
+        setPatientId(response.data.patientId || '');
+        setBillingId(response.data.billingId || '');
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  },[selectedRequestId])
+
+  useEffect(() => {
+    getBillById();
+  }, [getBillById]);
+
+
+  // Generate unique transactionId for cash payments
+  const generateTransactionId = () => {
+    return `TXN-${Math.floor(Math.random() * 1000)}`;
+  };
+
+
+  // pay bill
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (paymentMethod === 'cash') {
+      setTransactionId(generateTransactionId());
+    }
+    try {
+      const endpoint = paymentMethod === 'cash' ? '/payments' : '/payment/api';
+      await axios.post(endpoint, {
+        transactionId, amount, paymentMethod, patientId, billingId
+      });
+      toast.success('Payment Added Successfully');
+      getBillById()
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to add Payment');
+    }
+  }
 
   return (
     <div className='mx-auto p-4'>
@@ -90,9 +151,11 @@ const Billing = () => {
                           <th className='p-2'>ID</th>
                           <th className='p-2'>Patient Name</th>
                           <th className='p-2'>Amount</th>
+                          <th className='p-2'>Phone Number</th>
                           <th className='p-2'>Status</th>
                           <th className='p-2'>Billing Date</th>
                           <th className='p-2'>Created At</th>
+                          <th className='p-2'>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -101,13 +164,81 @@ const Billing = () => {
                             <td className='p-2'>{bill.billingId}</td>
                             <td className='p-2'>{bill.patient_name}</td>
                             <td className='p-2'>{bill.amount}</td>
+                            <td className='p-2'>{bill.phoneNumber}</td>
                             <td className='p-2'>
                               {bill.status === 'pending' 
                               ? (<span className='bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-full'>Pending</span>) 
-                              : (<span className='bg-green-100 text-greeb-700 font-bold px-3 py-1 rounded-full'>Paid</span>)}
+                              : (<span className='bg-green-100 text-green-700 font-bold px-3 py-1 rounded-full'>Paid</span>)}
                             </td>
                             <td className='p-2'>{new Date(bill.billingDate).toISOString().replace('T', ' ').slice(0, 19)}</td>
                             <td className='p-2'>{new Date(bill.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
+                            <td className='p-2'>
+                              <button onClick={() => openModal(bill.billingId)} className='px-4 py-0.5 rounded-full bg-purple-800 text-white hover:bg-purple-600'>Pay</button>
+                              <dialog id="my_modal_3" className="modal">
+                              <div className="modal-box">
+                                <form method="dialog">
+                                  {/* if there is a button in form, it will close the modal */}
+                                  <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                </form>
+                                <form onSubmit={handleSubmit}>
+                                  <div className='mt-2'>
+                                    <label htmlFor=""><span>Amount</span>
+                                    <input 
+                                      type="number"
+                                      placeholder="Amount"
+                                      className='px-3 py-2 bg-white border border-slate-300 disabled:bg-neutral-100 placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-yellow-500 w-full rounded-md focus:ring-1'
+                                      value={amount}
+                                      disabled
+                                      onChange={(e) => setAmount(e.target.value)}
+                                    />
+                                    </label>
+                                  </div>
+                                  <div className='mt-2'>
+                                    <label htmlFor='role'>Payment Method
+                                      <select 
+                                        name="" id=""
+                                        required
+                                        className='px-3 py-2 bg-white border border-slate-300 placeholder-slate-400 focus:outline-none focus:border-[#007CFF] focus:ring-[#007CFF] w-full rounded-md focus:ring-1'
+                                        value={paymentMethod}
+                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                      >
+                                        <option value="">Payment Method</option>
+                                        <option value="cash">Cash</option>
+                                        <option value="mpesa">Mpesa</option>
+                                      </select>
+                                    </label>
+                                  </div>
+                                  <div className='mt-2 hidden'>
+                                    <label htmlFor=""><span>Billing Id</span>
+                                    <input 
+                                      type="number"
+                                      disabled
+                                      placeholder="Billing Id"
+                                      className='px-3 py-2 bg-white border border-slate-300 placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-yellow-500 w-full rounded-md focus:ring-1'
+                                      value={billingId}
+                                      onChange={(e) => setBillingId(e.target.value)}
+                                    />
+                                    </label>
+                                  </div>
+                                  <div className='mt-2 hidden'>
+                                    <label htmlFor=""><span>Patientid</span>
+                                    <input 
+                                      type="number"
+                                      disabled
+                                      placeholder="PatientId"
+                                      className='px-3 py-2 bg-white border border-slate-300 disabled:bg-neutral-100 placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-yellow-500 w-full rounded-md focus:ring-1'
+                                      value={patientId}
+                                      onChange={(e) => setPatientId(e.target.value)}
+                                    />
+                                    </label>
+                                  </div>
+                                  <div className='mt-3'>
+                                    <button className='bg-blue-600 text-white px-4 py-0.5 hover:bg-blue-500 rounded-full'>Pay</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </dialog>
+                            </td>
                           </tr>
                         ))}
                       </tbody>

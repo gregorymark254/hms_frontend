@@ -154,7 +154,7 @@ const ViewPatient = () => {
                                     <td className='p-2'>
                                       {appointments.status === 'pending' 
                                       ? (<span className='bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-full'>Pending</span>) 
-                                      : (<span className='bg-green-100 text-greeb-700 font-bold px-3 py-1 rounded-full'>Attended</span>)}
+                                      : (<span className='bg-green-100 text-green-700 font-bold px-3 py-1 rounded-full'>Attended</span>)}
                                     </td>
                                     <td className='p-2'>{new Date(appointments.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
                                   </tr>
