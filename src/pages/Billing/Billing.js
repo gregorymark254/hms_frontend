@@ -173,7 +173,11 @@ const Billing = () => {
                             <td className='p-2'>{new Date(bill.billingDate).toISOString().replace('T', ' ').slice(0, 19)}</td>
                             <td className='p-2'>{new Date(bill.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
                             <td className='p-2'>
-                              <button onClick={() => openModal(bill.billingId)} className='px-4 py-0.5 rounded-full bg-purple-800 text-white hover:bg-purple-600'>Pay</button>
+                              {bill.status === 'pending' ? (
+                                <button onClick={() => openModal(bill.billingId)} className='px-4 py-0.5 rounded-full bg-purple-800 text-white hover:bg-purple-600'>Make Payment</button>
+                              ) : (
+                                <button className='px-4 py-0.5 rounded-full bg-neutral-300 text-white disabled cursor-not-allowed'>Payment Done</button>
+                              )}
                               <dialog id="my_modal_3" className="modal">
                               <div className="modal-box">
                                 <form method="dialog">
