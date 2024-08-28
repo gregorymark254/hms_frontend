@@ -48,7 +48,7 @@ const PatientBill = () => {
   return (
     <div className='bg-white rounded-lg p-4'>
       <div className='flex flex-wrap items-center justify-between py-3'>
-        <Link to={`/app/addbill/${id}`} className='bg-[#007CFF] hover:bg-[#7c86f9] text-white px-5 py-2 rounded-lg'>Add Bill</Link>
+        <Link to={`/app/createbill/${id}`} className='bg-[#007CFF] hover:bg-[#7c86f9] text-white px-5 py-2 rounded-lg'>Create Bill</Link>
         <h5 className='text-[#007CFF]'>Showing {bills.length} out of {total} bills</h5>
         <div className='py-2'>
           <form>

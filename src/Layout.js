@@ -29,6 +29,7 @@ import UpdatePrescription from './pages/Prescriptions/UpdatePrescription'
 import Medication from './pages/Medications/Medication'
 import PatientMedication from './pages/Medications/PatientMediacation'
 import Billing from './pages/Billing/Billing'
+import CreateBill from './pages/Billing/CreateBill'
 import Payment from './pages/Payments/Payment'
 
 
@@ -85,6 +86,7 @@ const Layout = () => {
               <Route path='/medications' element={<Medication />} />
               <Route path='/addmedication/:id' element={<PatientMedication />} />
               <Route path='/billings' element={<Billing />} />
+              <Route path='/createbill/:id' element={<CreateBill />} />
               <Route path='/payments' element={<Payment />} />
               <Route path='/unauthorised' element={<Unauthorised />} />
               <Route path='*' element={<Missing />} />
