@@ -4,6 +4,7 @@ import { MdOutlineBlock, } from 'react-icons/md';
 import Loader from '../Loader';
 import { toast } from 'sonner'
 import Pagination from '../Pagination';
+import { useNavigate } from "react-router-dom";
 
 const Billing = () => {
 
@@ -17,9 +18,11 @@ const Billing = () => {
   const [selectedRequestId, setSelectedRequestId] = useState('');
   const [transactionId,setTransactionId] = useState('')
   const [amount,setAmount] = useState('')
+  const [phoneNumber,setPhoneNumber] = useState('')
   const [patientId,setPatientId] = useState('')
   const [billingId,setBillingId] = useState('')
   const [paymentMethod,setPaymentMethod] = useState('')
+  const navigate = useNavigate()
 
   
   // Fetch All billing
@@ -67,6 +70,7 @@ const Billing = () => {
       try {
         const response = await axios.get(`/billing/${selectedRequestId}`);
         setAmount(response.data.amount || '');
+        setPhoneNumber(response.data.phoneNumber || '');
         setPatientId(response.data.patientId || '');
         setBillingId(response.data.billingId || '');
       } catch (error) {
@@ -89,19 +93,27 @@ const Billing = () => {
   // pay bill
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (paymentMethod === 'cash') {
-      setTransactionId(generateTransactionId());
-    }
+    setLoading(true)
     try {
-      const endpoint = paymentMethod === 'cash' ? '/payments' : '/payment/api';
-      await axios.post(endpoint, {
-        transactionId, amount, paymentMethod, patientId, billingId
-      });
-      toast.success('Payment Added Successfully');
+      if (paymentMethod === 'cash') {
+        setTransactionId(generateTransactionId());
+        await axios.post('/payments/', {
+          transactionId, amount, phoneNumber, paymentMethod, patientId, billingId
+        });
+        toast.success('Payment Added Successfully');
+      } else {
+        await axios.post('/payments/mpesa', {
+          amount, phoneNumber, paymentMethod, patientId, billingId
+        });
+        toast.info('STK Push sent to phone');
+      }
       getBillById()
+      navigate('/app/billings')
     } catch (error) {
       console.log(error);
       toast.error('Failed to add Payment');
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -187,14 +199,25 @@ const Billing = () => {
                                 <form onSubmit={handleSubmit}>
                                   <div className='mt-2'>
                                     <label htmlFor=""><span>Amount</span>
-                                    <input 
-                                      type="number"
-                                      placeholder="Amount"
-                                      className='px-3 py-2 bg-white border border-slate-300 disabled:bg-neutral-100 placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-yellow-500 w-full rounded-md focus:ring-1'
-                                      value={amount}
-                                      disabled
-                                      onChange={(e) => setAmount(e.target.value)}
-                                    />
+                                      <input 
+                                        type="number"
+                                        placeholder="Amount"
+                                        className='px-3 py-2 bg-white border border-slate-300 disabled:bg-neutral-100 placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-yellow-500 w-full rounded-md focus:ring-1'
+                                        value={amount}
+                                        disabled
+                                        onChange={(e) => setAmount(e.target.value)}
+                                      />
+                                    </label>
+                                  </div>
+                                  <div className='mt-2'>
+                                    <label htmlFor=""><span>Phone Number</span>
+                                      <input 
+                                        type="text"
+                                        placeholder="Phone Number"
+                                        className='px-3 py-2 bg-white border border-slate-300 disabled:bg-neutral-100 placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-yellow-500 w-full rounded-md focus:ring-1'
+                                        value={phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e.target.value)}
+                                      />
                                     </label>
                                   </div>
                                   <div className='mt-2'>
@@ -237,7 +260,7 @@ const Billing = () => {
                                     </label>
                                   </div>
                                   <div className='mt-3'>
-                                    <button className='bg-blue-600 text-white px-4 py-0.5 hover:bg-blue-500 rounded-full'>Pay</button>
+                                    <button className='bg-blue-600 text-white px-6 py-0.5 hover:bg-blue-500 rounded-full'>{loading ? 'Sending...' : 'Pay'}</button>
                                   </div>
                                 </form>
                               </div>
