@@ -111,8 +111,12 @@ const Billing = () => {
       }
       navigate('/app/billings')
     } catch (error) {
+      if (error.response.status === 400) {
+        toast.error(error.response.data.detail);
+      } else {
+        toast.error('Failed to add Payment');
+      }
       console.log(error);
-      toast.error('Failed to add Payment');
     } finally {
       setLoading(false)
     }
