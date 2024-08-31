@@ -95,7 +95,7 @@ const Payment = () => {
                           <th className='p-2'>Phone Number</th>
                           <th className='p-2'>Amount</th>
                           <th className='p-2'>Status</th>
-                          <th className='p-2'>Patient Name</th>
+                          <th className='p-2'>Patient Names</th>
                           <th className='p-2'>Payment Date</th>
                           <th className='p-2'>Created At</th>
                         </tr>
@@ -116,7 +116,7 @@ const Payment = () => {
                                 <span className='bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-full'>Pending</span>
                               )}
                             </td>
-                            <td className='p-2'>{pay.patientId}</td>
+                            <td className='p-2'>{pay.patientName}</td>
                             <td className='p-2'>{new Date(pay.paymentDate).toISOString().replace('T', ' ').slice(0, 19)}</td>
                             <td className='p-2'>{new Date(pay.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
                           </tr>
