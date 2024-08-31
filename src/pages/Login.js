@@ -23,6 +23,7 @@ const Login = ({ setAccessToken }) => {
     } catch (error) {
       console.log(error);
       toast.error('Login Failed');
+      setLoading(false);
     } finally {
       setLoading(false);
     }

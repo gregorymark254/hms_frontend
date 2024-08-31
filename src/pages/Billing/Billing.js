@@ -3,6 +3,7 @@ import axios from '../../api/api';
 import { MdOutlineBlock, } from 'react-icons/md';
 import Loader from '../Loader';
 import { toast } from 'sonner'
+import Swal from 'sweetalert2'
 import Pagination from '../Pagination';
 import { useNavigate } from "react-router-dom";
 
@@ -22,11 +23,12 @@ const Billing = () => {
   const [patientId,setPatientId] = useState('')
   const [billingId,setBillingId] = useState('')
   const [paymentMethod,setPaymentMethod] = useState('')
+  const [paymentLoading,setPaymentLoading] = useState(new Map())
   const navigate = useNavigate()
 
   
   // Fetch All billing
-  const getAppointments = useCallback(async (offset, limit, search) => {
+  const getBills = useCallback(async (offset, limit, search) => {
     try {
       const response = await axios.get(`/billing/?offset=${offset}&limit=${limit}&search=${search}`);
       setBilling(response.data.items);
@@ -49,10 +51,10 @@ const Billing = () => {
   useEffect(() => {
     const timerId = setTimeout(() => {
       setLoading(true);
-      getAppointments((currentPage - 1) * recordsPerPage, recordsPerPage, searchBilling);
+      getBills((currentPage - 1) * recordsPerPage, recordsPerPage, searchBilling);
     }, 500);
     return () => clearTimeout(timerId);
-  }, [currentPage, recordsPerPage, searchBilling, getAppointments]);
+  }, [currentPage, recordsPerPage, searchBilling, getBills]);
   
 
   // modal
@@ -107,13 +109,32 @@ const Billing = () => {
         });
         toast.info('STK Push sent to phone');
       }
-      getBillById()
       navigate('/app/billings')
     } catch (error) {
       console.log(error);
       toast.error('Failed to add Payment');
     } finally {
       setLoading(false)
+    }
+  }
+
+  // checking payment if not automatically updated
+  const checkPayment = async (billingId) => {
+    setPaymentLoading(new Map(paymentLoading.set(billingId, true))) // set loading for specific billing button
+    try {
+      const response = await axios.post(`/payments/transaction_status/${billingId}`)
+      Swal.fire({title: response.data[0].message, text: response.data[0].ResultDesc, icon: "success"});
+    } catch (error) {
+      if (error.response.status === 404) {
+        Swal.fire({title: "Payment Status", text: error.response.data.detail, icon: "error"});
+      } else if (error.response.status === 400) {
+        Swal.fire({title: error.response.data.detail.message, text: error.response.data.detail.ResultDesc, icon: "error"});
+      } else {
+        Swal("Payment Status", "Failed to check transaction status", "error" );
+      }
+      console.log(error)
+    } finally{
+      setPaymentLoading(new Map(paymentLoading.set(billingId, false)))
     }
   }
 
@@ -174,8 +195,8 @@ const Billing = () => {
                         {billing.map((bill) => (
                           <tr key={bill.billingId}>
                             <td className='p-2'>{bill.billingId}</td>
-                            <td className='p-2'>{bill.patient_name}</td>
-                            <td className='p-2'>{bill.amount}</td>
+                            <td className='p-2 whitespace-nowrap'>{bill.patient_name}</td>
+                            <td className='p-2 whitespace-nowrap'>{bill.amount}</td>
                             <td className='p-2'>{bill.phoneNumber}</td>
                             <td className='p-2'>
                               {bill.status === 'pending' 
@@ -185,11 +206,20 @@ const Billing = () => {
                             <td className='p-2'>{new Date(bill.billingDate).toISOString().replace('T', ' ').slice(0, 19)}</td>
                             <td className='p-2'>{new Date(bill.createdAt).toISOString().replace('T', ' ').slice(0, 19)}</td>
                             <td className='p-2'>
-                              {bill.status === 'pending' ? (
-                                <button onClick={() => openModal(bill.billingId)} className='px-4 py-0.5 rounded-full bg-purple-800 text-white hover:bg-purple-600'>Make Payment</button>
-                              ) : (
-                                <button className='px-4 py-0.5 rounded-full bg-neutral-300 text-white disabled cursor-not-allowed'>Payment Done</button>
-                              )}
+                              <div className='flex space-x-2'>
+                                {bill.status === 'pending' ? (
+                                  <button onClick={() => openModal(bill.billingId)} className='px-4 py-0.5 rounded-full bg-purple-800 text-white whitespace-nowrap hover:bg-purple-600'>Make Payment</button>
+                                ) : (
+                                  <button className='px-4 py-0.5 rounded-full bg-neutral-300 text-white disabled whitespace-nowrap cursor-not-allowed'>Payment Done</button>
+                                )}
+                                <button 
+                                  disabled={paymentLoading.get(bill.billingId) || false} 
+                                  onClick={() => checkPayment(bill.billingId)} 
+                                  className='px-4 py-0.5 rounded-full bg-purple-800 whitespace-nowrap text-white hover:bg-purple-600 disabled:cursor-not-allowed'
+                                >
+                                  {paymentLoading.get(bill.billingId) ? 'Checking...' : 'Check Payment'}
+                                </button>
+                              </div>
                               <dialog id="my_modal_3" className="modal">
                               <div className="modal-box">
                                 <form method="dialog">
