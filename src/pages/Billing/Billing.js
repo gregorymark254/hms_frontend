@@ -124,7 +124,7 @@ const Billing = () => {
 
   // checking payment if not automatically updated
   const checkPayment = async (billingId) => {
-    setPaymentLoading(new Map(paymentLoading.set(billingId, true))) // set loading for specific billing button
+    setPaymentLoading(new Map(paymentLoading.set(billingId, true)))
     try {
       const response = await axios.post(`/payments/payment_status/${billingId}`)
       Swal.fire({title: response.data[0].message, text: response.data[0].ResultDesc, icon: "success"});
