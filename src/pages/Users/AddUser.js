@@ -12,9 +12,11 @@ const AddUser = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role,setRole] = useState('')
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       await axios.post('/users/',
         {  firstName, lastName, email, password, role }
@@ -28,6 +30,8 @@ const AddUser = () => {
       } else {
         toast.error('Failed to add user')
       }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -114,7 +118,7 @@ const AddUser = () => {
             </label>
           </div>
           <div className='py-3'>
-            <button type='submit' className='bg-[#007CFF] text-white px-5 py-1 w-full hover:bg-[#7c86f9]'>Create User</button>
+            <button type='submit' className='bg-[#007CFF] text-white px-5 py-1 w-full hover:bg-[#7c86f9]'>{loading ? ('creating...') : ('Create User')}</button>
           </div>
         </form>
       </div>
