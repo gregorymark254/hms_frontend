@@ -1,11 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaUsers, FaMoneyCheck, FaBook } from "react-icons/fa";
+import axios from '../api/api'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts';
 
 const Home = () => {
 
   // getting current user
   const currentUser = window.localStorage.getItem('token');
   const user = JSON.parse(currentUser).data.user_data;
+
+  const [stats,setStats] = useState([])
+
+  useEffect(() => {
+    const getDayStats = async () => {
+      try {
+        const response = await axios.get('/reports/stats')
+        setStats(response.data.items)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getDayStats()
+  },[])
 
   return (
     <main>
@@ -40,6 +65,23 @@ const Home = () => {
                   <h4><b>Total Payments</b></h4>
                   <p className='text-orange-700 font-bold'>Ksh 234,230</p>
                 </div>
+              </div>
+            </div>
+
+            {/* graph stats */}
+            <div className='mt-4'>
+              <div className='bg-white p-4 rounded-md' >
+                <span><u><b>Number of registered users per day</b></u></span>
+                <ResponsiveContainer width="100%" height={400}>
+                <BarChart width={730} height={250} data={stats}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="count" fill="#8884d8" />
+                </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
