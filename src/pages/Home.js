@@ -6,7 +6,6 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer
@@ -74,7 +73,6 @@ const Home = () => {
                 <span><u><b>Number of registered users per day</b></u></span>
                 <ResponsiveContainer width="100%" height={400}>
                 <BarChart width={730} height={250} data={stats}>
-                  <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
                   <Tooltip />
