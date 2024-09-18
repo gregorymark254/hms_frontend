@@ -17,9 +17,13 @@ const Users = () => {
 
   
   // Fetch All users
-  const getUsers = useCallback(async (offset, limit, search) => {
+  const getUsers = useCallback(async (offset, limit, email) => {
     try {
-      const response = await axios.get(`/users?offset=${offset}&limit=${limit}&search=${search}`);
+      let query = `?offset=${offset}&limit=${limit}`
+      if (email) {
+        query += `&email=${email}`
+      }
+      const response = await axios.get(`/users${query}`);
       setUsers(response.data.items);
       setTotal(response.data.total);
       setLoading(false);
