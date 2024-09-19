@@ -21,8 +21,12 @@ const Login = ({ setAccessToken }) => {
       toast.success('Login Sucessful');
       navigate('/app/dashboard');
     } catch (error) {
+      if (!error?.response) {
+        toast.error('Network error! Check your connection')
+      } else {
+        toast.error('Login Failed!')
+      }
       console.log(error);
-      toast.error('Login Failed');
       setLoading(false);
     } finally {
       setLoading(false);
