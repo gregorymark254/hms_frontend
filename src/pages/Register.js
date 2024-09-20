@@ -26,8 +26,12 @@ const Register = () => {
       toast.success('Registration Sucessful');
       navigate('/login');
     } catch (error) {
+      if (!error?.response) {
+        toast.error('Network error! Check your connection')
+      } else {
+        toast.error('Registration Failed');
+      }
       console.log(error);
-      toast.error('Registration Failed');
     } finally {
       setLoading(false);
     }
