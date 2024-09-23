@@ -17,9 +17,14 @@ const Patient = () => {
 
   
   // Fetch All patient
-  const getPatients = useCallback(async (offset, limit, search) => {
+  const getPatients = useCallback(async (offset, limit, email) => {
     try {
-      const response = await axios.get(`/patients/?offset=${offset}&limit=${limit}&search=${search}`);
+      let query = `?offset=${offset}&limit=${limit}`
+      if (email) {
+        query  += `&email=${email}`
+      }
+
+      const response = await axios.get(`/patients/${query}`);
       setPatient(response.data.items);
       setTotal(response.data.total);
       setLoading(false);

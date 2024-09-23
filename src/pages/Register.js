@@ -117,6 +117,11 @@ const Register = () => {
           <div>
             <span>Already have an account? <u className='text-[#007CFF] hover:text-blue-700'><Link to='/login'>Login</Link></u></span>
           </div>
+
+          <div>
+            Lorem ipsum dolor, sit amet consectetu
+            r adipisicing elit. Perspiciatis at sit voluptatibus dolorum nisi nulla quaerat? Sunt libero dicta ratione, iusto debitis quo dolor consequuntur quibusdam corrupti illum, optio voluptate?
+          </div>
         </div>
       </div>
     </main>
