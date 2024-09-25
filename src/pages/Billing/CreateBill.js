@@ -22,8 +22,12 @@ const CreateBill = () => {
       toast.success('Billing added sucessfully')
       navigate(`/app/viewpatient/${id}`)
     } catch (error) {
+      if (error.response.status === 400) {
+        toast(error.response.data.detail)
+      } else {
+        toast.error('Failed to add medication')
+      }
       console.log(error)
-      toast.error('Failed to add medication')
     }
   }
 
