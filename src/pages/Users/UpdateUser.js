@@ -34,7 +34,11 @@ const UpdateUser = () => {
       toast.success('User Updated');
       navigate('/app/users');
     } catch (error) {
-      toast.error('Failed to update user');
+      if (!error?.response) {
+        toast.error('Network error! Check your connection')
+      } else {
+        toast.error('Failed to update user');
+      }
       console.log(error);
     }
   };
